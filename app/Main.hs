@@ -1,5 +1,6 @@
 module Main where
 
+import Control.Monad
 import System.Environment
 import System.Exit  
 import System.Clock
@@ -9,29 +10,45 @@ import Formatting
 import Formatting.Clock
 import Hasky
 import Euler1
+import Euler67
 
-main = getArgs >>= parse >>= putStr . display
+main = getArgs 
+        >>= parseArgs 
+        >>= mapToExpression
+        >>= computeWithBenchMark 
+        >>= putStr
 
-display  = unlines . lines
+parseArgs :: [String] -> IO String
+parseArgs [] = getContents
+parseArgs ["euler1"] = do return "euler1"
+parseArgs ["euler67"] = do return "euler67"
+parseArgs [_] = Main.exitFailure
+
+mapToExpression :: String -> IO Integer
+mapToExpression s = 
+    case s of
+        "euler1" ->
+            do return euler1
+        "euler67" -> 
+            do 
+                input <- readFile "triangle.txt"
+                let parseInput = map (map read . words) . lines
+                let inp = reverse (parseInput input)
+                return (euler67 inp)
+        _ -> return (-1)
+
+computeWithBenchMark :: Integer -> IO String
+computeWithBenchMark f = 
+    do  
+        start <- getTime ProcessCPUTime
+        evaluate f
+        end <- getTime ProcessCPUTime
+        let time = toMilliSeconds (diffTimeSpec end start)
+        let res = "Result: " ++ show (f) ++ "\nTime: " ++ (show time) ++ "ms\n"
+        return res
 
 toMilliSeconds :: TimeSpec -> Double
 toMilliSeconds ts = fromIntegral((toNanoSecs ts)) / (10^6)
 
-benchmarkWithResult f = 
-        do  
-            start <- getTime ProcessCPUTime
-            evaluate f
-            end <- getTime ProcessCPUTime
-            let time = toMilliSeconds (diffTimeSpec end start)
-            putStrLn ("Result: " ++ show (f))
-            putStrLn ("Time: " ++ (show time) ++ "ms")
-
-parse [] = getContents
-parse ["euler1"] = benchmarkWithResult euler1 >> exit
-parse [_] = Main.die
-                
-
-usage   = putStrLn "Usage: hasky [command]"
-version = putStrLn "Hasky 0.1"
-exit    = exitWith ExitSuccess
-die     = exitWith (ExitFailure 1)
+exitFailure   = exitWith (ExitFailure 1)
+exitSuccess   = exitWith ExitSuccess

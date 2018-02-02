@@ -11,7 +11,7 @@ module Euler5 ( euler5 ) where
     increment = product (primesTo 20)
     solve = solve' increment where
         solve' n 
-            | divByAll n $ reverse [1 .. 20]  = n
+            | divByAll n [11 .. 20]  = n
             | otherwise             = solve' (n + increment)
 
     euler5 :: Integer

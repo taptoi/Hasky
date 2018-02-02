@@ -8,13 +8,14 @@ module Euler3 ( euler3 ) where
                     | n `rem` p == 0 = False
                     | otherwise = isPrime' n ps
 
+
     maxPrimeFactor n = 
         maxPrimeFactor' n primes 2
         where
         maxPrimeFactor' c (p:ps) acc
             | p * p > n      = acc
             | c `rem` p /= 0 = maxPrimeFactor' c ps acc -- not a factor
-            | c `rem` p == 0 = maxPrimeFactor' (c `quot` p) ps p -- p becomes new max. Pass divided value to test.
+            | c `rem` p == 0 = maxPrimeFactor' (c `quot` p) ps p -- prime factor found
 
     euler3 :: Integer
     euler3 = maxPrimeFactor 600851475143

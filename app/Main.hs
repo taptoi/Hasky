@@ -13,6 +13,7 @@ import Euler1
 import Euler2
 import Euler3
 import Euler4
+import Euler5
 import Euler67
 
 main = getArgs 
@@ -27,6 +28,7 @@ parseArgs ["euler1"] = do return "euler1"
 parseArgs ["euler2"] = do return "euler2"
 parseArgs ["euler3"] = do return "euler3"
 parseArgs ["euler4"] = do return "euler4"
+parseArgs ["euler5"] = do return "euler5"
 parseArgs ["euler67"] = do return "euler67"
 parseArgs [_] = Main.exitFailure
 
@@ -41,6 +43,8 @@ mapToExpression s =
             do return euler3
         "euler4" ->
             do return euler4
+        "euler5" ->
+            do return euler5
         "euler67" -> 
             do 
                 input <- readFile "triangle.txt"

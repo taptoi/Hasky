@@ -12,6 +12,7 @@ import Hasky
 import Euler1
 import Euler2
 import Euler3
+import Euler4
 import Euler67
 
 main = getArgs 
@@ -25,6 +26,7 @@ parseArgs [] = getContents
 parseArgs ["euler1"] = do return "euler1"
 parseArgs ["euler2"] = do return "euler2"
 parseArgs ["euler3"] = do return "euler3"
+parseArgs ["euler4"] = do return "euler4"
 parseArgs ["euler67"] = do return "euler67"
 parseArgs [_] = Main.exitFailure
 
@@ -37,6 +39,8 @@ mapToExpression s =
             do return euler2
         "euler3" ->
             do return euler3
+        "euler4" ->
+            do return euler4
         "euler67" -> 
             do 
                 input <- readFile "triangle.txt"

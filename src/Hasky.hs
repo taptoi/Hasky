@@ -24,5 +24,5 @@ module Hasky (primes, primesTo, maxPrimeFactor, isPrime, listsOf, digits, ints) 
                 listsOf' [d] = []
                 listsOf' (d:ds) = take n ([d] ++ ds) : listsOf' ds
 
-    digits s = map (toInteger . digitToInt) $ filter isHexDigit s
-    ints s = map (\x -> read x :: Integer) (words s)
+    digits = map (toInteger . digitToInt) . filter isHexDigit
+    ints = map (\x -> read x :: Integer) . words

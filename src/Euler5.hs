@@ -8,7 +8,7 @@ module Euler5 ( euler5 ) where
         | n `rem` d /= 0 = False
         | n `rem` d == 0 = divByAll n ds
         
-    increment = product (primesTo 20)
+    increment = product . primesTo $ 20
     solve = solve' increment where
         solve' n 
             | divByAll n [11 .. 20]  = n

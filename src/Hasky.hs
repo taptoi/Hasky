@@ -1,5 +1,6 @@
-module Hasky (primes, primesTo, maxPrimeFactor, isPrime, listsOf, digits, ints) where
+module Hasky (primes, primesTo, maxPrimeFactor, primeFactors, isPrime, listsOf, digits, ints) where
     import Data.Char(digitToInt, isHexDigit)
+    import Data.List(tails)
     primes = 2 : filter (isPrime) [3, 5 ..]
     isPrime n = isPrime' n primes
                 where 
@@ -10,13 +11,22 @@ module Hasky (primes, primesTo, maxPrimeFactor, isPrime, listsOf, digits, ints) 
 
     primesTo n = takeWhile (<= n) primes
 
-    maxPrimeFactor n = 
-        maxPrimeFactor' n primes 2
+    primeFactors n = 
+        primeFactors' n primes []
         where
-        maxPrimeFactor' c (p:ps) acc
-            | p * p > n      = acc
-            | c `rem` p /= 0 = maxPrimeFactor' c ps acc -- not a factor
-            | c `rem` p == 0 = maxPrimeFactor' (c `quot` p) ps p -- prime factor found
+        primeFactors' c (p:ps) acc
+            | p > c          = acc
+            | c `rem` p /= 0 = primeFactors' c ps acc -- not a factor
+            | c `rem` p == 0 = primeFactors' (c `quot` p) ps (p:acc) -- prime factor found
+
+    maxPrimeFactor = maximum . primeFactors
+
+    -- factors n = concat . map (\pf -> [pf * 1, pf * 2 .. (n-1)]) . primeFactors $ n
+
+    pairs :: [a] -> [[a]]
+    pairs xs = [ [x,y] | (x:rest) <- tails xs , y <- rest ]
+
+    powers n = [n, n*n ..]
 
     listsOf n xs = filter (\a -> length a == n) $ listsOf' xs 
             where 
